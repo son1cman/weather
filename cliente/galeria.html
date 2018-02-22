@@ -1,0 +1,90 @@
+<html>
+<head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+ <div class="container">
+        <div class="row">
+        <div class="gallery col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h1 class="gallery-title">Gallery</h1>
+        </div>
+
+        <div align="center">
+            <div class="form-group">
+                <label for="usr">Search:</label>
+                <input type="text" class="form-control" id="usr">
+            </div>
+            <button class="btn btn-default" data-filter="all" id="search">Buscar</button>
+
+        </div>
+        <br/>
+        <div class="row" id="Gall">
+        </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+                $.get('http://localhost/ww/v1/', function(data){
+            var $myDiv = $('#Gall');
+            console.log(data.response); // Debug
+           // $(data.data).each(function(i, x){
+                $(data.response).each(function(j, k){
+                    var $img = $('<img></img>');
+                    $img.attr('src', 'http://localhost/ww/public/' + k.name).height(365).width(365).addClass("gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6");
+
+                    $myDiv.append($img);
+                });
+                
+         //   });
+        });
+
+    $("#search").click(function(){
+        var value = $('#usr').val();//$(this).attr('data-filter');
+         /*$('#Gall').children().fadeOut(50, function() {
+             $('#Gall').empty();
+            });*/
+        //alert(value);
+        $.get('http://localhost/ww/v1/searches', { name: value}  ).done( function(data){
+            var $myDiv = $('#Gall');
+            console.log(data.response); // Debug
+           // $(data.data).each(function(i, x){
+           
+                $(data.response).each(function(j, k){
+
+                    var $img = $('<img></img>');
+                    $img.attr('src', 'http://localhost/ww/public/' + k.name)
+                    
+                    $myDiv.empty().append($img.clone()).height(365).width(365).addClass("gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6");
+                });
+                
+         //   });
+        });
+        
+       /* if(value == "all")
+        {
+            //$('.filter').removeClass('hidden');
+            //$('.filter').show('1000');
+        }
+        else
+        {
+//            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
+//            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
+           // $(".filter").not('.'+value).hide('3000');
+           // $('.filter').filter('.'+value).show('3000');
+            
+        }*/
+    });
+    
+ 
+
+});
+</script>
+</body>
+</section>
+
+
+</html>
