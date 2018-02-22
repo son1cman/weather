@@ -13,67 +13,93 @@ CodeIgniter 3.0+
 
 
 
-### Installing
+### Handling Requests
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
+Front Html
 
 ```
-Give the example
+<form id="uploadimage" action="" method="post" enctype="multipart/form-data">
+    <input type="file" name="userfile" id="userfile">
+    <input type="submit" value="Upload Image" name="submit">
+</form>
 ```
 
-And repeat
+Front JS
 
 ```
-until finished
+$("#uploadimage").on('submit',(function(e) {
+e.preventDefault();
+  
+  var form_data = new FormData($('#uploadimage')[0]);
+  $.ajax({
+      type:'POST',
+      url:'http://localhost/ww/v1/uploads',
+      processData: false,
+      contentType: false,
+      async: false,
+      cache: false,
+      data : form_data  });
+}));
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+This will do the trick
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Go to http://localhost/cliente/ for full example
 
-### Break down into end to end tests
+### Api Conventions
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
+Front must use prefix 'http://localhost/ww/public/' in order to load images.
 
 ```
-Give an example
+function getcitiesfromapi(){
+                $.get('http://localhost/ww/v1/', function(data){
+			
+            var $myDiv = $('#Gall');
+            $myDiv.empty()
+            //console.log(data.response); // Debug
+           
+                $(data.response).each(function(j, k){
+                    var $img = $('<img></img>');
+                    $img.attr('src', 'http://localhost/ww/public/' + k.name).height(365).width(365).addClass("gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6");
+
+                    $myDiv.append($img);
+                });
+                
+         //   });
+        });
 ```
 
-## Deployment
+### HTTP Verbs
 
-Add additional notes about how to deploy this on a live system
+HTTP verbs, or methods, should be used in compliance with their definitions under the [HTTP/1.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) standard.
+The action taken on the representation will be contextual to the media type being worked on and its current state:
 
-## Built With
+| HTTP METHOD | POST            | GET       | PUT         | DELETE |
+| ----------- | --------------- | --------- | ----------- | ------ |
+| CRUD OP     | CREATE          | READ      | UPDATE      | DELETE |
+| /uploads    | Create new image| erro      | error       | error  |
+| /searches/1234  | Error           | Show Bo   | If exists, update Bo; If not, error | Delete Bo |
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+```
+Api ww/v1
+```
 
-## Contributing
+## Error Handling
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+200 - OK
+400 - Bad Request
+404 - Not Found
+500 - Internal Server Error
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+V1.0
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Kevin Martinez** - *Initial work* - [PurpleBooth](https://github.com/son1cman)
 
 ## License
 
@@ -81,6 +107,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* Google
+* Wikipedia
+* StackOverFlow
